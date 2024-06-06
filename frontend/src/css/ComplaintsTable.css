@@ -1,0 +1,116 @@
+.complaints-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.complaints-table th, .complaints-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.complaints-table th {
+  background-color: #76ABA9;
+  color: #ffffff;
+}
+
+.complaints-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.complaints-table tr:hover {
+  background-color: #e0e0e0;
+}
+
+button {
+  background-color: #76ABA9;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* button:hover {
+  background-color: #ffffff;
+  color: #76ABA9;
+  border: 1px solid #76ABA9;
+} */
+
+.table-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #76ABA9;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  /* transition: background-color 0.3s ease; */
+  margin-left: 10px; /* Add margin for spacing */
+}
+
+/* button:hover {
+  background-color: #ffffff;
+  color: #76ABA9;
+  border: 1px solid #76ABA9;
+} */
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  display: block;
+  position: absolute;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+  z-index: 1;
+  margin-top: 5px;
+}
+
+.dropdown-item {
+  padding: 10px 20px;
+  cursor: pointer;
+  color: #333333;
+  white-space: nowrap;
+}
+
+/* .dropdown-item:hover {
+  background-color: #76ABA9;
+  color: #ffffff;
+} */
+
+button {
+  background-color: #76ABA9;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  /* transition: background-color 0.3s ease; */
+  margin-left: 10px; /* Add margin for spacing */
+}
+
+/* button:hover {
+  background-color: #ffffff;
+  color: #76ABA9;
+  border: 1px solid #76ABA9;
+} */

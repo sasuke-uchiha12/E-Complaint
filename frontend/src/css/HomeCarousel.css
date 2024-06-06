@@ -1,0 +1,75 @@
+/* HomeCarousel.css */
+.carousel-container {
+    position: relative;
+    max-width: 100%;
+    margin: auto;
+    overflow: hidden;
+}
+
+/* Initially hide the arrows */
+.prev,
+.next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    font-size: 24px;
+    padding: 10px;
+    border-radius: 50%;
+    opacity: 0;
+    /* Arrows are invisible initially */
+    transition: opacity 0.3s ease;
+    /* Smooth transition for opacity */
+}
+
+/* Only show the arrows when hovering over the carousel */
+.carousel-container:hover .prev,
+.carousel-container:hover .next {
+    opacity: 1;
+    /* Make arrows visible on hover */
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
+
+.prev:hover,
+.next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 550px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.slide.active {
+    opacity: 1;
+    position: relative;
+}
+
+.slide img {
+    width: 100%;
+    height: auto;
+}
+
+.slide-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 24px;
+    text-align: center;
+    width: 100%;
+}

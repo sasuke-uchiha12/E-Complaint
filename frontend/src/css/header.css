@@ -1,0 +1,53 @@
+/* header.css */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #1f1f1f;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+nav {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-button {
+    background: linear-gradient(145deg, #333333, #444444);
+    color: #ffffff;
+    border: 1px solid #444444;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    border-radius: 5px;
+}
+
+.nav-button:hover {
+    background: linear-gradient(145deg, #444444, #555555) !important;
+    transform: scale(1.05);
+}
+
+.nav-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #888888;
+}
+
+.nav-button:active {
+    transform: scale(0.95);
+}

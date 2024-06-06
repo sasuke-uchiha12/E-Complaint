@@ -1,0 +1,105 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2; /* Slightly lighter background */
+  color: #333333; /* Dark text */
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh; /* Adjusted height */
+}
+
+.login-form {
+  background-color: #ffffff; /* White background */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+  padding: 40px;
+  text-align: center;
+  width: 400px; /* Adjusted width */
+}
+
+.login-form h2 {
+  margin-bottom: 20px;
+  color: #333333; /* Dark text */
+}
+
+.error-message {
+  color: #ff0000; /* Red error message */
+  margin-bottom: 20px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.input-group input {
+  width: 80%; /* Adjusted width */
+  padding: 14px !important;
+  border: 1px solid #333333; /* Dark border */
+  border-radius: 5px;
+  background-color: white !important;
+  color: black !important;
+}
+
+.login-button {
+  background-color: #76ABA9; /* Dark button color */
+  color: #ffffff; /* White text */
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px !important;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: white;
+  color: #1f1f1f;
+  border: 1px solid #76ABA9;
+}
+
+.login-button:focus {
+  outline: none;
+  transition: none !important; /* Remove focus outline */
+}
+
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.forgot-password,
+.sign-up {
+  color: #76ABA9; /* Match the button color */
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.forgot-password:hover,
+.sign-up:hover {
+  text-decoration: underline;
+}
+
+/* Add this to the existing CSS */
+
+.extra-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.extra-links span {
+  color: #76ABA9;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.extra-links span:hover {
+  text-decoration: underline;
+}

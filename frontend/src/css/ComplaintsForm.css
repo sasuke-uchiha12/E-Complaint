@@ -1,0 +1,67 @@
+.complaint-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .complaint-form {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .complaint-form h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333333;
+    text-align: center;
+  }
+  
+  .complaint-form .input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .complaint-form .input-group label {
+    margin-bottom: 5px;
+    color: #333333;
+  }
+  
+  .complaint-form .input-group input,
+  .complaint-form .input-group textarea,
+  .complaint-form .input-group select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .complaint-form input[type="file"] {
+    border: none;
+  }
+  
+  .complaint-form button[type="submit"] {
+    background-color: #76ABA9;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    width: 100%;
+  }
+  
+  .complaint-form button[type="submit"]:hover {
+    background-color: #ffffff;
+    color: #76ABA9;
+    border: 1px solid #76ABA9;
+  }
+  

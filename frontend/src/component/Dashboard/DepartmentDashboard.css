@@ -1,0 +1,126 @@
+.dashboard {
+    padding: 20px;
+  }
+  
+  .dashboard-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .dashboard-header h1 {
+    font-size: 24px;
+    color: #333333;
+  }
+  
+  button {
+    background-color: #76ABA9;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #ffffff;
+    color: #76ABA9;
+    border: 1px solid #76ABA9;
+  }
+  
+  .overlay-active {
+    position: relative;
+    z-index: 10;
+  }
+  
+  .form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .form-overlay .form-container {
+    /* background-color: #ffffff; */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown {
+  position: relative;
+  margin-right: 10px;
+}
+
+.dropdown-menu {
+  display: block;
+  position: absolute;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+  z-index: 1;
+  margin-top: 5px;
+}
+
+.dropdown-item {
+  padding: 10px 20px;
+  cursor: pointer;
+  color: #333333;
+  white-space: nowrap;
+}
+
+.dropdown-item:hover {
+  background-color: #76ABA9;
+  color: #ffffff;
+}
+
+button {
+  background-color: #76ABA9;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #ffffff;
+  color: #76ABA9;
+  border: 1px solid #76ABA9;
+}
+
+.dashboard-header button {
+    padding: 10px 30px !important;
+}
