@@ -1,107 +1,86 @@
 const express = require('express');
-const multer = require('multer');
-const router = express.Router();
-const Complaint = require('../models/complaint');
+const Complaint = require('../models/Complaint');
+const { authenticate } = require('../middleware/authenticate');
 
-const upload = multer({ dest: 'uploads/' });
+module.exports = (io) => {
+  const router = express.Router();
 
-// Get all complaints
-router.get('/', async (req, res) => {
+  // Middleware to authenticate the user
+  router.use(authenticate);
+
+  // Create a complaint
+  router.post('/', async (req, res) => {
+    const { title, issue, location, phone, priority, department, assignedWorker, status, image, assignedAt } = req.body;
+
     try {
-        const complaints = await Complaint.find();
-        res.json(complaints);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-});
-
-// Create a new complaint
-router.post('/', upload.single('image'), async (req, res) => {
-    const { identifier, title, issue, location, nature, phone, priority, department, assignedWorker, status } = req.body;
-    const image = req.file ? req.file.path : null;
-    
-    const complaint = new Complaint({
-        // identifier,
+      const complaint = new Complaint({
         title,
         issue,
         location,
-        // nature,
         phone,
         priority,
-        department,
+        department: req.user.userType === 'department' ? req.user.department : department,
         assignedWorker,
         status,
         image,
-    });
+        assignedAt: new Date()
+      });
+
+      await complaint.save();
+      io.emit('complaintCreated', complaint); // Emit event
+      res.status(201).json(complaint);
+    } catch (err) {
+      console.error('Error creating complaint:', err);
+      res.status(500).json({ message: err.message });
+    }
+  });
+
+  // Get complaints for a department
+  router.get('/department', async (req, res) => {
+    try {
+      const complaints = await Complaint.find({ department: req.user.department });
+      res.status(200).json(complaints);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+
+  // Get all complaints (Admin only)
+  router.get('/admin', async (req, res) => {
+    if (req.user.userType !== 'admin') {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
 
     try {
-        const newComplaint = await complaint.save();
-        const io = req.app.get('io');
-        io.emit('complaintCreated', newComplaint);
-        res.status(201).json(newComplaint);
+      const complaints = await Complaint.find();
+      res.status(200).json(complaints);
     } catch (err) {
-        res.status(400).json({ message: err.message });
+      res.status(500).json({ message: err.message });
     }
-});
+  });
 
-// Assign a worker and update status
-router.patch('/assign/:id', async (req, res) => {
-    const { assignedWorker } = req.body;
+  // Update complaint status
+  router.put('/:id', async (req, res) => {
+    if (req.user.userType !== 'admin') {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+
     try {
-        const updatedComplaint = await Complaint.findByIdAndUpdate(req.params.id, {
-            assignedWorker,
-            status: 'In Progress',
-            assignedAt: new Date(),
-        }, { new: true });
-        const io = req.app.get('io');
-        io.emit('complaintUpdated', updatedComplaint);
-        res.json(updatedComplaint);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-});
+      const complaint = await Complaint.findById(req.params.id);
+      if (!complaint) {
+        return res.status(404).json({ message: 'Complaint not found' });
+      }
 
-// Mark work as done by department
-router.patch('/mark-done/:id', async (req, res) => {
-    try {
-        const updatedComplaint = await Complaint.findByIdAndUpdate(req.params.id, {
-            status: 'Done',
-            doneAt: new Date(),
-        }, { new: true });
-        const io = req.app.get('io');
-        io.emit('complaintUpdated', updatedComplaint);
-        res.json(updatedComplaint);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-});
+      const updates = req.body;
+      Object.assign(complaint, updates);
 
-// Update status by ID
-router.patch('/status/:id', async (req, res) => {
-    const { status } = req.body;
-    try {
-        const updatedComplaint = await Complaint.findByIdAndUpdate(req.params.id, { status }, { new: true });
-        const io = req.app.get('io');
-        io.emit('complaintUpdated', updatedComplaint);
-        res.json(updatedComplaint);
+      await complaint.save();
+      io.emit('complaintUpdated', complaint); // Emit event
+      res.status(200).json(complaint);
     } catch (err) {
-        res.status(400).json({ message: err.message });
+      res.status(500).json({ message: err.message });
     }
-});
+  });
 
-// Check and revert status if needed
-setInterval(async () => {
-    const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000);
-    try {
-        const complaints = await Complaint.find({ status: 'In Progress', assignedAt: { $lt: sixHoursAgo } });
-        complaints.forEach(async (complaint) => {
-            const updatedComplaint = await Complaint.findByIdAndUpdate(complaint._id, { status: 'Pending' });
-            const io = req.app.get('io');
-            io.emit('complaintUpdated', updatedComplaint);
-        });
-    } catch (err) {
-        console.error('Error updating status:', err.message);
-    }
-}, 60000); // Check every minute
-
-module.exports = router;
+  return router;
+};

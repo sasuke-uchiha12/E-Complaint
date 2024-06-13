@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../css/ComplaintsForm.css'
+import '../css/ComplaintsForm.css';
 
 function ComplaintForm({ onSubmit }) {
     const [complaintData, setComplaintData] = useState({
-        // identifier: '',
         title: '',
         issue: '',
         location: '',
-        // nature: '',
         phone: '',
         priority: 'low',
         department: 'HR',
@@ -33,18 +31,18 @@ function ComplaintForm({ onSubmit }) {
             Object.keys(complaintData).forEach((key) => {
                 formData.append(key, complaintData[key]);
             });
+            console.log("Submitting data: ", complaintData);
             const res = await axios.post('http://localhost:5000/api/complaints', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
             });
             onSubmit(res.data);
             setComplaintData({
-                // identifier: '',
                 title: '',
                 issue: '',
                 location: '',
-                // nature: '',
                 phone: '',
                 priority: 'low',
                 department: 'HR',
@@ -61,17 +59,6 @@ function ComplaintForm({ onSubmit }) {
         <div className="complaint-form-container">
             <form className="complaint-form" onSubmit={handleSubmit} encType="multipart/form-data">
                 <h1>Complaint Form</h1>
-                {/* <div className="input-group">
-                    <label htmlFor="identifier">Identifier</label>
-                    <input
-                        type="text"
-                        id="identifier"
-                        name="identifier"
-                        value={complaintData.identifier}
-                        onChange={handleChange}
-                        required
-                    />
-                </div> */}
                 <div className="input-group">
                     <label htmlFor="title">Title</label>
                     <input
@@ -104,17 +91,6 @@ function ComplaintForm({ onSubmit }) {
                         required
                     />
                 </div>
-                {/* <div className="input-group">
-                    <label htmlFor="nature">Nature of the Complaint</label>
-                    <input
-                        type="text"
-                        id="nature"
-                        name="nature"
-                        value={complaintData.nature}
-                        onChange={handleChange}
-                        required
-                    />
-                </div> */}
                 <div className="input-group">
                     <label htmlFor="phone">Phone Number</label>
                     <input
