@@ -8,6 +8,7 @@ function SignupPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [userType, setUserType] = useState('department');
+    const [department, setDepartment] = useState('');
     const [otp, setOtp] = useState('');
     const [error, setError] = useState(null);
     const [otpSent, setOtpSent] = useState(false);
@@ -21,7 +22,7 @@ function SignupPage() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name, email, password, userType }),
+                body: JSON.stringify({ name, email, password, userType, department }),
             });
 
             if (!response.ok) {
@@ -56,8 +57,8 @@ function SignupPage() {
             }
 
             const data = await response.json();
-            alert(data.message); // Notify the user about successful OTP verification
-            navigate(`/login/${userType}`); // Redirect to the appropriate login page based on user type
+            alert(data.message);
+            navigate(`/login/${userType}`);
         } catch (error) {
             setError(error.message);
         }
@@ -101,13 +102,30 @@ function SignupPage() {
                             <select
                                 value={userType}
                                 onChange={(e) => setUserType(e.target.value)}
-                                required style={{width: "88%"}}
+                                required
+                                style={{ width: "88%" }}
                             >
                                 <option value="superadmin">Superadmin</option>
                                 <option value="admin">Admin</option>
                                 <option value="department">Department</option>
                             </select>
                         </div>
+                        {userType === 'department' && (
+                            <div className="input-group">
+                                <select
+                                    value={department}
+                                    onChange={(e) => setDepartment(e.target.value)}
+                                    required
+                                    style={{ width: "88%" }}
+                                >
+                                    <option value="" disabled>Select Department</option>
+                                    <option value="Department of Computer Science">Department of Computer Science</option>
+                                    <option value="Department of Mechanical Engineering">Department of Mechanical Engineering</option>
+                                    <option value="Department of Electrical Engineering">Department of Electrical Engineering</option>
+                                    <option value="Department of Civil Engineering">Department of Civil Engineering</option>
+                                </select>
+                            </div>
+                        )}
                     </>
                 )}
                 {otpSent && (

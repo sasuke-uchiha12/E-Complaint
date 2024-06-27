@@ -40,13 +40,13 @@ const AdminTable = ({ complaints, workers, assignWorker, updateStatus, markAsDel
                                     <button onClick={() => updateStatus(index, 'Completed')}>Verify and Mark as Completed</button>
                                 )}
                                 {complaint.status === 'In Progress' && (
-                                    <button onClick={() => updateStatus(index, 'Pending')} className='button-spacing'>Revert to Pending</button>
+                                    <button onClick={() => updateStatus(index, 'Pending')} className="button-spacing">Revert to Pending</button>
                                 )}
-                                {complaint.status !== 'Delayed' && complaint.status !== 'Done' && (
-                                    <button onClick={() => markAsDelayed(index)}>Mark as Delayed</button>
+                                {complaint.status !== 'Delayed' && complaint.status !== 'Done' && complaint.status !== 'Completed' && (
+                                    <button onClick={() => markAsDelayed(index)} className="button-spacing">Mark as Delayed</button>
                                 )}
                                 {complaint.status === 'Delayed' && (
-                                    <button onClick={() => resumeWork(index)}>Resume Work</button>
+                                    <button onClick={() => resumeWork(index)} className="button-spacing">Resume Work</button>
                                 )}
                             </td>
                             <td>

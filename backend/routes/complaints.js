@@ -5,18 +5,15 @@ const Complaint = require('../models/complaint');
 
 const upload = multer({ dest: 'uploads/' });
 
-// Mock function to check equipment availability (replace with actual logic)
 const isEquipmentAvailable = (requiredEquipment) => {
-    // Mocked inventory, replace with actual inventory logic
     const inventory = {
         tool1: 10,
-        tool2: 0, // Assume tool2 is unavailable
+        tool2: 0,
         tool3: 5
     };
     return requiredEquipment.every(equipment => inventory[equipment] > 0);
 };
 
-// Get all complaints
 router.get('/', async (req, res) => {
     try {
         const complaints = await Complaint.find();
@@ -26,7 +23,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Create a new complaint
 router.post('/', upload.single('image'), async (req, res) => {
     const { title, issue, location, phone, priority, department, equipment } = req.body;
     const image = req.file ? req.file.path : null;
@@ -40,7 +36,7 @@ router.post('/', upload.single('image'), async (req, res) => {
         department,
         status: 'Pending',
         image,
-        equipment: equipment ? equipment.split(',') : [], // Store equipment as an array
+        equipment: equipment ? equipment.split(',') : [],
     });
 
     try {
@@ -53,14 +49,11 @@ router.post('/', upload.single('image'), async (req, res) => {
     }
 });
 
-// Assign a worker and update status
 router.patch('/assign/:id', async (req, res) => {
     const { assignedWorker } = req.body;
     try {
         const complaint = await Complaint.findById(req.params.id);
-
-        // Check worker and equipment availability
-        const workersAvailable = ['Worker 1', 'Worker 2']; // Replace with actual worker availability logic
+        const workersAvailable = ['Worker 1', 'Worker 2'];
         const equipmentAvailable = isEquipmentAvailable(complaint.equipment);
 
         if (!workersAvailable.includes(assignedWorker) || !equipmentAvailable) {
@@ -84,7 +77,6 @@ router.patch('/assign/:id', async (req, res) => {
     }
 });
 
-// Mark work as done by department
 router.patch('/mark-done/:id', async (req, res) => {
     try {
         const updatedComplaint = await Complaint.findByIdAndUpdate(req.params.id, {
@@ -99,7 +91,6 @@ router.patch('/mark-done/:id', async (req, res) => {
     }
 });
 
-// Mark complaint as delayed by admin
 router.patch('/delay/:id', async (req, res) => {
     try {
         const updatedComplaint = await Complaint.findByIdAndUpdate(req.params.id, {
@@ -113,14 +104,11 @@ router.patch('/delay/:id', async (req, res) => {
     }
 });
 
-// Reassign and resume work on delayed complaint
 router.patch('/resume/:id', async (req, res) => {
     const { assignedWorker } = req.body;
     try {
         const complaint = await Complaint.findById(req.params.id);
-
-        // Check worker and equipment availability
-        const workersAvailable = ['Worker 1', 'Worker 2']; // Replace with actual worker availability logic
+        const workersAvailable = ['Worker 1', 'Worker 2'];
         const equipmentAvailable = isEquipmentAvailable(complaint.equipment);
 
         if (!workersAvailable.includes(assignedWorker) || !equipmentAvailable) {
@@ -140,7 +128,6 @@ router.patch('/resume/:id', async (req, res) => {
     }
 });
 
-// Update status by ID
 router.patch('/status/:id', async (req, res) => {
     const { status } = req.body;
     try {
@@ -153,7 +140,6 @@ router.patch('/status/:id', async (req, res) => {
     }
 });
 
-// Check and revert status if needed
 setInterval(async () => {
     const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000);
     try {
@@ -166,6 +152,6 @@ setInterval(async () => {
     } catch (err) {
         console.error('Error updating status:', err.message);
     }
-}, 60000); // Check every minute
+}, 60000);
 
 module.exports = router;
