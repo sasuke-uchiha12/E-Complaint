@@ -66,6 +66,32 @@ const AdminDashboard = () => {
         }
     };
 
+    const markAsDelayed = async (index) => {
+        try {
+            const updatedComplaint = await axios.patch(`http://localhost:5000/api/complaints/delay/${complaints[index]._id}`);
+            setComplaints((prevComplaints) =>
+                prevComplaints.map((complaint, i) =>
+                    i === index ? updatedComplaint.data : complaint
+                )
+            );
+        } catch (error) {
+            console.error('There was an error marking the complaint as delayed!', error);
+        }
+    };
+
+    const resumeWork = async (index) => {
+        try {
+            const updatedComplaint = await axios.patch(`http://localhost:5000/api/complaints/resume/${complaints[index]._id}`, { assignedWorker: complaints[index].assignedWorker });
+            setComplaints((prevComplaints) =>
+                prevComplaints.map((complaint, i) =>
+                    i === index ? updatedComplaint.data : complaint
+                )
+            );
+        } catch (error) {
+            console.error('There was an error resuming the work on the complaint!', error);
+        }
+    };
+
     return (
         <div className="admin-dashboard">
             <AdminHeader />
@@ -74,6 +100,8 @@ const AdminDashboard = () => {
                 workers={workers} 
                 assignWorker={assignWorker} 
                 updateStatus={updateStatus} 
+                markAsDelayed={markAsDelayed} 
+                resumeWork={resumeWork} 
             />
         </div>
     );

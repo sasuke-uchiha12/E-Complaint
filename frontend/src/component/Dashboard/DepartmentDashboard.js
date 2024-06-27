@@ -50,6 +50,11 @@ const DepartmentDashboard = () => {
         try {
             const updatedComplaint = { ...complaints[index], status: 'Done' };
             await axios.patch(`http://localhost:5000/api/complaints/mark-done/${complaints[index]._id}`, updatedComplaint);
+            setComplaints((prevComplaints) => 
+                prevComplaints.map((complaint, i) => 
+                    i === index ? updatedComplaint : complaint
+                )
+            );
         } catch (error) {
             console.error('There was an error updating the complaint!', error);
         }

@@ -1,127 +1,9 @@
-// import React from 'react';
-// import '../css/AdminTable.css';
-
-// const AdminTable = ({ complaints, workers, assignWorker, updateStatus }) => {
-//     return (
-//         <div className="complaints-table-container">
-//             <table className="complaints-table">
-//                 <thead>
-//                     <tr>
-//                         {/* <th>Identifier</th> */}
-//                         <th>Title</th>
-//                         <th>Issue</th>
-//                         <th>Location</th>
-//                         <th>Assigned Worker</th>
-//                         <th>Status</th>
-//                         <th>Actions</th>
-//                     </tr>
-//                 </thead>
-//                 <tbody>
-//                     {complaints.map((complaint, index) => (
-//                         <tr key={index}>
-//                             {/* <td>{complaint.identifier}</td> */}
-//                             <td>{complaint.title}</td>
-//                             <td>{complaint.issue}</td>
-//                             <td>{complaint.location}</td>
-//                             <td>
-//                                 {complaint.assignedWorker || (
-//                                     <select onChange={(e) => assignWorker(index, e.target.value)} defaultValue="">
-//                                         <option value="" disabled>Select Worker</option>
-//                                         {workers.map((worker, i) => (
-//                                             <option key={i} value={worker}>{worker}</option>
-//                                         ))}
-//                                     </select>
-//                                 )}
-//                             </td>
-//                             <td>{complaint.status}</td>
-//                             <td>
-//                                 {complaint.status === 'Done' && (
-//                                     <button onClick={() => updateStatus(index, 'Completed')}>Verify and Mark as Completed</button>
-//                                 )}
-//                                 {complaint.status === 'In Progress' && (
-//                                     <button onClick={() => updateStatus(index, 'Pending')}>Revert to Pending</button>
-//                                 )}
-//                             </td>
-//                         </tr>
-//                     ))}
-//                 </tbody>
-//             </table>
-//         </div>
-//     );
-// };
-
-// export default AdminTable;
-
-// import React from 'react';
-// import { PDFDownloadLink } from '@react-pdf/renderer';
-// import ComplaintPDF from './ComplaintPDF'; // Import the PDF document component
-// import '../css/AdminTable.css';
-
-// const AdminTable = ({ complaints, workers, assignWorker, updateStatus }) => {
-//     return (
-//         <div className="complaints-table-container">
-//             <table className="complaints-table">
-//                 <thead>
-//                     <tr>
-//                         <th>Title</th>
-//                         <th>Issue</th>
-//                         <th>Location</th>
-//                         <th>Assigned Worker</th>
-//                         <th>Status</th>
-//                         <th>Actions</th>
-//                     </tr>
-//                 </thead>
-//                 <tbody>
-//                     {complaints.map((complaint, index) => (
-//                         <tr key={index}>
-//                             <td>{complaint.title}</td>
-//                             <td>{complaint.issue}</td>
-//                             <td>{complaint.location}</td>
-//                             <td>
-//                                 {complaint.assignedWorker || (
-//                                     <select onChange={(e) => assignWorker(index, e.target.value)} defaultValue="">
-//                                         <option value="" disabled>Select Worker</option>
-//                                         {workers.map((worker, i) => (
-//                                             <option key={i} value={worker}>{worker}</option>
-//                                         ))}
-//                                     </select>
-//                                 )}
-//                             </td>
-//                             <td>{complaint.status}</td>
-//                             <td>
-//                                 {complaint.status === 'Done' && (
-//                                     <button onClick={() => updateStatus(index, 'Completed')}>Verify and Mark as Completed</button>
-//                                 )}
-//                                 {complaint.status === 'In Progress' && (
-//                                     <button onClick={() => updateStatus(index, 'Pending')}>Revert to Pending</button>
-//                                 )}
-//                                 <PDFDownloadLink
-//                                     document={<ComplaintPDF complaint={complaint} />}
-//                                     fileName={`complaint_${complaint._id}.pdf`}
-//                                 >
-//                                     {({ loading }) => (
-//                                         <button className="download-button">
-//                                             {loading ? 'Generating PDF...' : 'Download PDF'}
-//                                         </button>
-//                                     )}
-//                                 </PDFDownloadLink>
-//                             </td>
-//                         </tr>
-//                     ))}
-//                 </tbody>
-//             </table>
-//         </div>
-//     );
-// };
-
-// export default AdminTable;
-
 import React from 'react';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import ComplaintPDF from './ComplaintPDF'; // Import the PDF document component
+import ComplaintPDF from './ComplaintPDF';
 import '../css/AdminTable.css';
 
-const AdminTable = ({ complaints, workers, assignWorker, updateStatus }) => {
+const AdminTable = ({ complaints, workers, assignWorker, updateStatus, markAsDelayed, resumeWork }) => {
     return (
         <div className="complaints-table-container">
             <table className="complaints-table">
@@ -133,7 +15,7 @@ const AdminTable = ({ complaints, workers, assignWorker, updateStatus }) => {
                         <th>Assigned Worker</th>
                         <th>Status</th>
                         <th>Actions</th>
-                        <th>Download</th> {/* Added Download Column */}
+                        <th>Download</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -158,20 +40,28 @@ const AdminTable = ({ complaints, workers, assignWorker, updateStatus }) => {
                                     <button onClick={() => updateStatus(index, 'Completed')}>Verify and Mark as Completed</button>
                                 )}
                                 {complaint.status === 'In Progress' && (
-                                    <button onClick={() => updateStatus(index, 'Pending')}>Revert to Pending</button>
+                                    <button onClick={() => updateStatus(index, 'Pending')} className='button-spacing'>Revert to Pending</button>
+                                )}
+                                {complaint.status !== 'Delayed' && complaint.status !== 'Done' && (
+                                    <button onClick={() => markAsDelayed(index)}>Mark as Delayed</button>
+                                )}
+                                {complaint.status === 'Delayed' && (
+                                    <button onClick={() => resumeWork(index)}>Resume Work</button>
                                 )}
                             </td>
                             <td>
-                                <PDFDownloadLink
-                                    document={<ComplaintPDF complaint={complaint} />}
-                                    fileName={`complaint_${complaint._id}.pdf`}
-                                >
-                                    {({ loading }) => (
-                                        <button className="download-button">
-                                            {loading ? 'Generating PDF...' : 'Download PDF'}
-                                        </button>
-                                    )}
-                                </PDFDownloadLink>
+                                {complaint.status !== 'Delayed' && (
+                                    <PDFDownloadLink
+                                        document={<ComplaintPDF complaint={complaint} />}
+                                        fileName={`complaint_${complaint._id}.pdf`}
+                                    >
+                                        {({ loading }) => (
+                                            <button className="download-button">
+                                                {loading ? 'Generating PDF...' : 'Download PDF'}
+                                            </button>
+                                        )}
+                                    </PDFDownloadLink>
+                                )}
                             </td>
                         </tr>
                     ))}

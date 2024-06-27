@@ -114,3 +114,30 @@ button {
   color: #76ABA9;
   border: 1px solid #76ABA9;
 } */
+
+/* tooltip - delayed */
+.complaints-table td span {
+  position: relative;
+  cursor: pointer;
+}
+
+.complaints-table td span::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 1;
+}
+
+.complaints-table td span:hover::after {
+  opacity: 1;
+}
