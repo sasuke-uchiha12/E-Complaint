@@ -3,6 +3,7 @@ const multer = require('multer');
 const router = express.Router();
 const Complaint = require('../models/complaint');
 
+
 const upload = multer({ dest: 'uploads/' });
 
 // Get all complaints
@@ -103,5 +104,7 @@ setInterval(async () => {
         console.error('Error updating status:', err.message);
     }
 }, 60000); // Check every minute
+
+
 
 module.exports = router;

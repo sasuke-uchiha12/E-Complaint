@@ -9,7 +9,7 @@ const ComplaintSchema = new mongoose.Schema({
     phone: String,
     priority: String,
     department: String,
-    assignedWorker: String,
+    assignedWorker: { type: mongoose.Schema.Types.ObjectId, ref: 'Employee' },
     status: { type: String, default: 'Pending' },
     image: String,
     assignedAt: Date, // New field to track when a worker was assigned

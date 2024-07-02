@@ -49,6 +49,8 @@ const authRouter = require('./routes/auth'); // Ensure this path is correct
 const complaintsRouter = require('./routes/complaints');
 const http = require('http');
 const { Server } = require('socket.io');
+const employeeRouter = require('./routes/employees');
+
 
 const app = express();
 const server = http.createServer(app);
@@ -73,6 +75,7 @@ app.use(cookieParser());
 // Routes
 app.use('/api/auth', authRouter); // Ensure this path matches the one used in the frontend
 app.use('/api/complaints', complaintsRouter);
+app.use('/api/employees', employeeRouter);
 
 app.set('io', io);
 
