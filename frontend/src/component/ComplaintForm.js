@@ -4,14 +4,12 @@ import '../css/ComplaintsForm.css'
 
 function ComplaintForm({ onSubmit }) {
     const [complaintData, setComplaintData] = useState({
-        // identifier: '',
         title: '',
         issue: '',
         location: '',
-        // nature: '',
         phone: '',
         priority: 'low',
-        department: 'HR',
+        department: localStorage.getItem('department'), // Automatically get the department from local storage
         assignedWorker: '',
         status: 'Pending',
         image: null,
@@ -33,21 +31,23 @@ function ComplaintForm({ onSubmit }) {
             Object.keys(complaintData).forEach((key) => {
                 formData.append(key, complaintData[key]);
             });
+
+            const token = localStorage.getItem('token'); // Get the token from local storage
+
             const res = await axios.post('http://localhost:5000/api/complaints', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}` // Include the token in the request headers
                 },
             });
             onSubmit(res.data);
             setComplaintData({
-                // identifier: '',
                 title: '',
                 issue: '',
                 location: '',
-                // nature: '',
                 phone: '',
                 priority: 'low',
-                department: 'HR',
+                department: localStorage.getItem('department'), // Reset the department
                 assignedWorker: '',
                 status: 'Pending',
                 image: null,
@@ -61,17 +61,6 @@ function ComplaintForm({ onSubmit }) {
         <div className="complaint-form-container">
             <form className="complaint-form" onSubmit={handleSubmit} encType="multipart/form-data">
                 <h1>Complaint Form</h1>
-                {/* <div className="input-group">
-                    <label htmlFor="identifier">Identifier</label>
-                    <input
-                        type="text"
-                        id="identifier"
-                        name="identifier"
-                        value={complaintData.identifier}
-                        onChange={handleChange}
-                        required
-                    />
-                </div> */}
                 <div className="input-group">
                     <label htmlFor="title">Title</label>
                     <input
@@ -104,17 +93,6 @@ function ComplaintForm({ onSubmit }) {
                         required
                     />
                 </div>
-                {/* <div className="input-group">
-                    <label htmlFor="nature">Nature of the Complaint</label>
-                    <input
-                        type="text"
-                        id="nature"
-                        name="nature"
-                        value={complaintData.nature}
-                        onChange={handleChange}
-                        required
-                    />
-                </div> */}
                 <div className="input-group">
                     <label htmlFor="phone">Phone Number</label>
                     <input
