@@ -11,16 +11,27 @@ const socket = io('http://localhost:5000');
 const DepartmentDashboard = () => {
     const [showForm, setShowForm] = useState(false);
     const [complaints, setComplaints] = useState([]);
+    const department = localStorage.getItem('department');
 
     useEffect(() => {
+        const fetchComplaints = async () => {
+            try {
+                const res = await axios.get(`http://localhost:5000/api/department/my-complaints?department=${department}`);
+                setComplaints(res.data);
+            } catch (error) {
+                console.error('There was an error fetching the complaints!', error);
+            }
+        };
+
         fetchComplaints();
+
         socket.on('complaintCreated', (newComplaint) => {
             setComplaints((prevComplaints) => [...prevComplaints, newComplaint]);
         });
 
         socket.on('complaintUpdated', (updatedComplaint) => {
-            setComplaints((prevComplaints) => 
-                prevComplaints.map((complaint) => 
+            setComplaints((prevComplaints) =>
+                prevComplaints.map((complaint) =>
                     complaint._id === updatedComplaint._id ? updatedComplaint : complaint
                 )
             );
@@ -30,16 +41,7 @@ const DepartmentDashboard = () => {
             socket.off('complaintCreated');
             socket.off('complaintUpdated');
         };
-    }, []);
-
-    const fetchComplaints = async () => {
-        try {
-            const res = await axios.get('http://localhost:5000/api/complaints');
-            setComplaints(res.data);
-        } catch (error) {
-            console.error('There was an error fetching the complaints!', error);
-        }
-    };
+    }, [department]);
 
     const handleFormSubmit = (newComplaint) => {
         setComplaints([...complaints, newComplaint]);
@@ -50,8 +52,8 @@ const DepartmentDashboard = () => {
         try {
             const updatedComplaint = { ...complaints[index], status: 'Done' };
             await axios.patch(`http://localhost:5000/api/complaints/mark-done/${complaints[index]._id}`, updatedComplaint);
-            setComplaints((prevComplaints) => 
-                prevComplaints.map((complaint, i) => 
+            setComplaints((prevComplaints) =>
+                prevComplaints.map((complaint, i) =>
                     i === index ? updatedComplaint : complaint
                 )
             );
@@ -84,7 +86,7 @@ const DepartmentDashboard = () => {
                 <div className="dashboard-container">
                     <div className="dashboard-header">
                         <h1>Complaints</h1>
-                        <button onClick={toggleFormVisibility} style= {{padding: "10px 20px"}}>Add New Complaint</button>
+                        <button onClick={toggleFormVisibility} style={{ padding: "10px 20px" }}>Add New Complaint</button>
                     </div>
                     <ComplaintsTable complaints={complaints} markAsDone={markAsDone} />
                 </div>
