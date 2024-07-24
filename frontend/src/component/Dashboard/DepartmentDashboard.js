@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ComplaintForm from '../ComplaintForm';
 import ComplaintsTable from '../ComplaintsTable';
 import DashHeader from '../DashHeader';
@@ -13,16 +13,21 @@ const DepartmentDashboard = () => {
     const [complaints, setComplaints] = useState([]);
     const department = localStorage.getItem('department');
 
-    useEffect(() => {
-        const fetchComplaints = async () => {
-            try {
-                const res = await axios.get(`http://localhost:5000/api/department/my-complaints?department=${department}`);
-                setComplaints(res.data);
-            } catch (error) {
-                console.error('There was an error fetching the complaints!', error);
-            }
-        };
+    const fetchComplaints = useCallback(async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await axios.get(`http://localhost:5000/api/complaint/my-complaints`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setComplaints(res.data);
+        } catch (error) {
+            console.error('There was an error fetching the complaints!', error);
+        }
+    }, [department]);
 
+    useEffect(() => {
         fetchComplaints();
 
         socket.on('complaintCreated', (newComplaint) => {
@@ -41,7 +46,7 @@ const DepartmentDashboard = () => {
             socket.off('complaintCreated');
             socket.off('complaintUpdated');
         };
-    }, [department]);
+    }, [fetchComplaints]);
 
     const handleFormSubmit = (newComplaint) => {
         setComplaints([...complaints, newComplaint]);
@@ -50,8 +55,13 @@ const DepartmentDashboard = () => {
 
     const markAsDone = async (index) => {
         try {
+            const token = localStorage.getItem('token');
             const updatedComplaint = { ...complaints[index], status: 'Done' };
-            await axios.patch(`http://localhost:5000/api/complaints/mark-done/${complaints[index]._id}`, updatedComplaint);
+            await axios.patch(`http://localhost:5000/api/complaint/mark-done/${complaints[index]._id}`, updatedComplaint, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             setComplaints((prevComplaints) =>
                 prevComplaints.map((complaint, i) =>
                     i === index ? updatedComplaint : complaint

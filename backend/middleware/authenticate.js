@@ -6,15 +6,15 @@ function authenticate(req, res, next) {
     if (!authHeader) {
         return res.status(401).json({ message: 'Authorization token is missing' });
     }
-
+    
     const token = authHeader.split(' ')[1];
     if (!token) {
-        return res.status(401).json({ message: 'Authorization token is missing' });
+        return res.status(401).json({ message: 'Token is missing' });
     }
 
     try {
         const data = jwt.verify(token, config.jwtSecret);
-        req.user = data;
+        req.user = { username: data.username, department: data.department };
         next();
     } catch (error) {
         if (error.name === 'TokenExpiredError') {

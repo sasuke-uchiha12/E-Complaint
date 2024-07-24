@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../css/ComplaintsForm.css'
+import '../css/ComplaintsForm.css';
 
 function ComplaintForm({ onSubmit }) {
     const [complaintData, setComplaintData] = useState({
@@ -9,7 +9,7 @@ function ComplaintForm({ onSubmit }) {
         location: '',
         phone: '',
         priority: 'low',
-        department: localStorage.getItem('department'), // Automatically get the department from local storage
+        department: localStorage.getItem('department'),
         assignedWorker: '',
         status: 'Pending',
         image: null,
@@ -27,17 +27,18 @@ function ComplaintForm({ onSubmit }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No token found');
+            }
             const formData = new FormData();
             Object.keys(complaintData).forEach((key) => {
                 formData.append(key, complaintData[key]);
             });
-
-            const token = localStorage.getItem('token'); // Get the token from local storage
-
-            const res = await axios.post('http://localhost:5000/api/complaints', formData, {
+            const res = await axios.post('http://localhost:5000/complaint/submit', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${token}` // Include the token in the request headers
+                    'Authorization': `Bearer ${token}`,
                 },
             });
             onSubmit(res.data);
@@ -47,7 +48,7 @@ function ComplaintForm({ onSubmit }) {
                 location: '',
                 phone: '',
                 priority: 'low',
-                department: localStorage.getItem('department'), // Reset the department
+                department: localStorage.getItem('department'),
                 assignedWorker: '',
                 status: 'Pending',
                 image: null,
@@ -56,6 +57,7 @@ function ComplaintForm({ onSubmit }) {
             console.error('There was an error submitting the complaint!', error);
         }
     };
+    
 
     return (
         <div className="complaint-form-container">

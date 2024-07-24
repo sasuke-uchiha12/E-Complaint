@@ -7,51 +7,18 @@ function LoginPage() {
     const { userType } = useParams();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [otp, setOtp] = useState('');
     const [error, setError] = useState(null);
-    const [otpSent, setOtpSent] = useState(false);
 
     const handleLogin = async (event) => {
         event.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:5000/api/auth/login', {
+            const response = await fetch('http://localhost:5000/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ uname: username, password })
-            });
-
-            if (!response.ok) {
-                const errorMessage = await response.json();
-                throw new Error(errorMessage.message);
-            }
-
-            const data = await response.json();
-            if (data.message === 'OTP sent to email') {
-                setOtpSent(true);
-            } else {
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('userType', data.role);
-                localStorage.setItem('department', data.department);
-                navigate(`/dashboard/${data.role}`);
-            }
-        } catch (error) {
-            setError(error.message);
-        }
-    };
-
-    const handleOtpVerification = async (event) => {
-        event.preventDefault();
-
-        try {
-            const response = await fetch('http://localhost:5000/api/auth/verify-otp', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email: username, otp })
             });
 
             if (!response.ok) {
@@ -73,23 +40,16 @@ function LoginPage() {
 
     return (
         <div className="login-container">
-            <form className="login-form" onSubmit={otpSent ? handleOtpVerification : handleLogin}>
+            <form className="login-form" onSubmit={handleLogin}>
                 <h2>{title}</h2>
                 {error && <div className="error-message">{error}</div>}
                 <div className="input-group">
                     <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} required />
                 </div>
-                {!otpSent && (
-                    <div className="input-group">
-                        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                    </div>
-                )}
-                {otpSent && (
-                    <div className="input-group">
-                        <input type="text" placeholder="OTP" value={otp} onChange={(e) => setOtp(e.target.value)} required />
-                    </div>
-                )}
-                <button type="submit" className="login-button">{otpSent ? 'Verify OTP' : 'Sign In'}</button>
+                <div className="input-group">
+                    <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                </div>
+                <button type="submit" className="login-button">Sign In</button>
                 <div className="extra-links">
                     <span onClick={() => navigate('/forgot-password')}>Forgot Password?</span>
                     <span onClick={() => navigate('/signup')}>Sign Up</span>

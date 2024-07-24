@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const Complaint = require('../models/complaint');
-const authenticate = require('../middleware/authenticate'); // Import authenticate middleware
+const Complaint = require('../models/Complaint');
+const authenticate = require('../middleware/authenticate');
 
 router.get('/my-complaints', authenticate, async (req, res) => {
-    const { department } = req.query;
-
     try {
+        const department = req.user.department;
         const complaints = await Complaint.find({ department });
         res.status(200).json(complaints);
     } catch (error) {

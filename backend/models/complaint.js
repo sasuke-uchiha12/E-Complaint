@@ -1,17 +1,28 @@
 const mongoose = require('mongoose');
 
-const ComplaintSchema = new mongoose.Schema({
-    title: String,
-    issue: String,
-    location: String,
-    phone: String,
-    priority: String,
-    department: String,
-    assignedWorker: String,
-    status: { type: String, default: 'Pending' },
-    image: String,
-    assignedAt: Date,
-    equipment: [String], // New field to track required equipment
+const complaintSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  complaintId: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  description: String,
+  status: {
+    type: String,
+    default: 'Pending'
+  },
+  department: {
+    type: String,
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
-module.exports = mongoose.model('Complaint', ComplaintSchema);
+module.exports = mongoose.model('Complaint', complaintSchema);
