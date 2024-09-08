@@ -80,5 +80,5 @@ nodemon server.js or node server.js
 ## Technologies Used
 - React, React Router
 - Node js, Express
-- MongoBD
+- MongoDB
 - GitHub Pages
